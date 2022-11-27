@@ -1,4 +1,4 @@
-# RAIDA_KEY_EXCHANGE
+# RKE ( RAIDA Key Exchange )
 How to shares keys in a quantum safe manner. To make the protocol extensible and flexible, there are many different ways that things can be done. 
 I will try to add some discussion about this 
 
