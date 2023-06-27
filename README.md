@@ -7,7 +7,7 @@ Computers must store shared secrets called "Keys".
 ### Two Key Types:
   RAIDA Keys (AKA "coins") 
   * Allows the users to send and retrieve encrypted encryption keys to and from the RAIDA.
-  * Contains one serial number and twentyfive 128 bit passwords. See [Standard format](https://www.com)
+  * Contains one serial number and twentyfive 128 bit passwords. See [Standard format](https://github.com/worthingtonse/RAIDA_KEY_EXCHANGE/blob/main/Key%20Coin%20Format)
   * We suggest the use of the open source [Key Manager](https://something.com)  using the standard folder structure.
   
   Encryption Keys: 
