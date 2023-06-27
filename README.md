@@ -1,5 +1,5 @@
 # RAIDA Key Exchange
-An open-source protocol for quantum-safe cryptographic key exchanged. For use as an alternative to SSL/TLS
+An open-source protocol for quantum-safe cryptographic key exchanged. This enable the use of the [Presentation Layer Security protocol](https://som.com) as an alternative to TLS. 
 
 ## 1. Key Storage on clients and servers
 Computers must store shared secrets called "Keys". 
