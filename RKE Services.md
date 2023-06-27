@@ -4,73 +4,11 @@
 
 These services are meant to allow keys to be shared amoung computers that are not RAIDA. They will use the RKE to do the share.
 
-Command Code | Service | Done in Rust | Done in C | Done in C2
---- | --- | :---: | --- | ---
-41 | [Post Key](DA%20Key%20Tickets.md#post-key) |  |🟢 |
-42 | [Get Key](RAIDA%20Key%20Services.md#get-key) |  | 🟢|
-43 | 🔴[Key Alert](RAIDA%20Key%20Services.md#key-alert) |  | |
-
-
-There are three action catagories of the key exchange:
-1. 🔴Receiver advertising 
-2. 🔴Client receiver resolution
-3. Posting Keys
-4. 🔴Alerting the other person
-5. Getting Keys
-
-## 🔴Receiver Advertising
-Before a person can receive keys from another user, they must have a DNS record that points to the RKE servers that the receiver has trust/coins with.
-However, if there are not DNS records or DNS names are unknown, then it is assumed that they both have keys(CloudCoins) on the CloudCoin RAIDA. 
-
-Sample DNS TXT Record:
-There are three types of DNS records that can be used:
-1. Entire RAIDAs. These are the Coin IDs that are part of the RAIDA Namespace (0-65535). They specify entire RAIDA clouds that have RKE enabled. For exmple, the Coin ID 1 would mean that all 25 CloudCoin RAIDA can be used.
-2. Individual RKE servers. An array of specific RKE servers. These RKE may not be parts of other RAIDA or parts of coins. 
-3. Anonymous. This allows the client to specify the RAIDA and the server will then join these RAIDA
-
-### Sample Coin ID DNS TXT record named "RKE"'s content:
-```
-"1" "2" "17 "65023"
-```
-In the example above, the key receivers is advertising that it has shared secrets (coins) with the RAIDA IDs of 1, 2, 17 and 65023.  The client will then need to ask the Guardians for host records for the locations of these RAIDA. And the client may need to get coins to talk to these RAIDA. 
-
-### Sample Indvidual DNS TXT record named "RKE"'s content:
-```
-"r0=RKE.secure.com 89828293 30000 " "r1=RKE.secure.com 89828293 30000 " "r2=RKE.secure.com 89828293 30000 " "r3=RKE.secure.com 89828293 30000 " "r4=RKE.secure.com 89828293 30000 " "r5=RKE.secure.com 89828293 30000 ""r6=RKE.secure.com 89828293 30000 " "r7=RKE.secure.com 89828293 30000 " "r8=RKE.secure.com 89828293 30000 " "r9=RKE.secure.com 89828293 30000 " "r10=RKE.secure.com 89828293 30000 " "r11=RKE.secure.com 89828293 30000 "
-```
-Here the receiver supports 12 RKE servers and they all encrypt with key number 89,828,293 and use port 30,000.
-
-Sample Anonymous DNS TXT record named "RKE"'s content:
-```
-"anonymous=ok"
-```
- ### It is also possible to mix them:
- ```
- "1" "r0=RKE.secure.com 89828293 30000 " "anonymous=ok"
- ```
-
-## Client Receiver Resolution
-1. The client will lookup the receivers RKE TXT record using a call to DNS. 
-2. The client then parse the TXT file.
-3. The client will decide on a strategy of which RKE servers to use.
-4. The client resolves the IP addresses of the RKE servers (if needed). 
-
-## Ticket Getting. 
-In the ticket getting phase, the client will create a key and then have the receiver's RKE servers encrypt it. 
-
-Step | Actor | Action | Notes
----|---|---|---
-1 | Alice | Generatges a key ID | This is a GUID 
-2 | Alice | Generatges an encryption key that is For now 128 bits. | This is a GUID
-3 | Alice | Alice breaks the key into 4 parts (Each 4 bytes long) | Parts are indexed as part 0 through parat 3.
-4 | Alice | Encrypts the request using a shared secret between the client and the common RKE servers  | Common RKE servers come from the DNS records of the Receiver
-5 | Alice | Calls the [Post Key](RAIDA%2Key%20Tickets.md#post-key) service on the RKEs| Tells the RKE to store the key for the receiver. 
-7 | RKEs | They unencrypt the request using Alice's shared secret | Creates a hash of the key and stores it it's "REK Table" and the key ID is plain text.  
-9 | Alice| Alice calles the Receiver's [Key Alert](RAIDA%20Key%20Services.md#key-aletr) | Now the receiver knows to go get the keys. 
-10 |  Bob| Calls the RKEs [Get Key](RAIDA%20Key%20Services.md#get-key) service | Many RKE servers are called. 
-11 | Bob | Bob puts the keys together and stores it in his "key Wallet" | Tells Alice that the key is ready. 
-12 | Alice |Puts the keyh in her "Key Wallet" | Encrypted encryption can commence. 
-
+Command Code | Service 
+--- | --- 
+41 | [Post Key](DA%20Key%20Tickets.md#post-key) 
+42 | [Get Key](RAIDA%20Key%20Services.md#get-key) 
+43 | [Signal](RAIDA%20Key%20Services.md#signal) 
 
 
 # POST KEY
@@ -177,65 +115,10 @@ IP IP IP IP IP IP IP IP IP IP IP IP I4 I4 I4 I4
 E3 E3  //Not Encrypted
 ```
 
-# User story
-```
-
-
-RKE user story
-Alice wants to talk to Bob. She starts Ghost Chats and goes to create a new contact. 
-She sees two buttons. 
-	1. Invite user to join you. 
-	2. Accept another users Invitation. 
-
-IF SHE CLICKS "Invite User to Join"
-1. Computer asks "What code word will you use for this contact?"
-2. Then the computer shows the user a code ""YB7-UEY3". "Give this initation code to "Codename".
-3. She gives the code to Bob
-3. Bob opens his Ghost chat and clicks "Accept another Users Invitiation"
-
-
-IF SHE CLICKS "Accept another users Invitation"
-1. Computer asks "What code word will you use for this contact?"
-2. She has received a code from Bob that looks like "UJH-87F9"
-3. She sees a box "Enter "Codename's Invitation Code Here" 
-4. She presses the "Add" button. 
-5. The program addes Bob as a contact.  
-
-Behind the seenes:
-Invitor:
-	1. Alice generates a random seven digit number YUO-HHGF called the invite code. 
-	2. Runs an MD5 hash against the invite code. This is the key ID. 
-	3. The key is split up into four parts and four RAIDA are chosen to hold the key parts. 
-	4. Calls "Post Key". Does not include "IP Address of receiver" or "Coin That the Receiver Should Use".
-	5. Gives Bob the Invite Code. 	
-5. Alice aranges all the key parts into a different order so lowest ones first. 
-	
-Invited
-	1. Bob recieves the Invite Code over email, voice, chat or someway. 
-	2. Bob puts the code into the program. 
-	3. An MD5 hash is run on the Invite code. 
-	4. Then another MD5 has is run on that code. This will be sent to the RKE. 
-	5. Bob calls all RAIDA's Get Key service. Senders ID Key and IP address are blank. 
-	6. Bob downloads the key parts from the RAIDA that had keys. 
-	7. Bob arranges the keys so that they are in order of the from lowest first number to highest. 
-	Example: 
-40b4967e5e4d4
-85b9f177f
-BD1774166
-	8.Bob takes the key ID from the response and puts that in as Alice's ID and creates the contact. 
-	9. Sends a chat message to Alice's address. 
-
-Invitor: 
-	1. Alice checks messages and finds one from an unknown ID. 
-	2. The message is the same Invite Code (No end to end encryption). 
-	3. Alice creates a contact. 
-
-
-```
 
 
 
-# 🔴KEY ALERT
+# Signal
 Tells the Receiver that there are keys waiting for it. 
 
 Sample Request (Unencrypted):
