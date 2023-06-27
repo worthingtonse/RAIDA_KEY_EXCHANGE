@@ -7,12 +7,12 @@ Computers must store shared secrets called "Keys".
 ### Two Key Types:
   RAIDA Keys (AKA "coins") 
   * Allows the users to send and retrieve encrypted encryption keys to and from the RAIDA.
-  * Contains one serial number and twentyfive 128 bit passwords. See format
+  * Contains one serial number and twentyfive 128 bit passwords. See [Standard format](https://www.com)
   * We suggest the use of the open source [Key Manager](https://something.com)  using the standard folder structure.
   
   Encryption Keys: 
   * Encrypts communications between client and server.
-  * Contain the name or ID of who the key is for and a 256 bit key.
+  * Contain the name or ID of who the key is for and a 256 bit key.See [Standard format](https://www.com)
   * We suggest the use of the open source [Key Manager](https://something.com)   using the standard folder structure. 
 	
 ## 2. Enabling a Server to use RKE
