@@ -1,0 +1,2 @@
+# Domain Name System Service Record Standard
+Servers who want to connect with clients using RKE need to publish their service using a service record. 
