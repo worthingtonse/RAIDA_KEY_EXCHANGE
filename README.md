@@ -20,13 +20,13 @@ To enable a server to use RKE, a DNS service record and a DNS TXT record explain
 - [ ] Add an [RKE signalling service record](https://something.com) to the servers DNS.
 - [ ] Add an [RKE Membership TXT record](https://something.com)  to the server's DNS. 
 - [ ] Receive Key Signals using the [Signal Service](https://something.com) protocol
-- [ ] Get keys using the [Get Key](https://something.com) protocol. 
+- [ ] Get keys using the [Get Key]([https://something.com](https://github.com/worthingtonse/RAIDA_KEY_EXCHANGE/blob/main/RKE%20Services.md#get-key)) protocol. 
 		
 ## 3. Enabling a Client to use RKE
 For a client to use RKE it must be able to resolve Server RAIDA Membership, Post keys and signal the RKE Enabled Server.
 - [ ] Resolve server signalling service using DNS wrapped in [PLS](https://something.com).
 - [ ] Resolve server membership records using DNS wrapped in [PLS](https://something.com).
-- [ ] Post keys using the [Post Key](https://something.com) protocol. 
-- [ ] Signal the server using the [Signal Service](https://something.com) protocol
+- [ ] Post keys using the [Post Key](https://github.com/worthingtonse/RAIDA_KEY_EXCHANGE/blob/main/RKE%20Services.md#post-key) protocol. 
+- [ ] Signal the server using the [Signal Service]([https://something.com](https://github.com/worthingtonse/RAIDA_KEY_EXCHANGE/blob/main/RKE%20Services.md#get-key)https://github.com/worthingtonse/RAIDA_KEY_EXCHANGE/blob/main/RKE%20Services.md#get-key) protocol
 
 
