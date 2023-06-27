@@ -12,7 +12,7 @@ Computers must store shared secrets called "Keys".
   
   Encryption Keys: 
   * Encrypts communications between client and server.
-  * Contain the name or ID of who the key is for and a 256 bit key.See [Standard format](https://www.com)
+  * Contain the name or ID of who the key is for and a 256 bit key.See [Standard format](https://github.com/worthingtonse/RAIDA_KEY_EXCHANGE/blob/main/Encryption%20Key%20Format)
   * We suggest the use of the open source [Key Manager](https://something.com)   using the standard folder structure. 
 	
 ## 2. Enabling a Server to use RKE
