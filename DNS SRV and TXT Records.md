@@ -35,27 +35,54 @@ server_authentication | yes or no | Must the server leave their key ID?
 
 ### Sample Coin ID DNS TXT record named "RKE"'s content:
 ```ini
-;To parse, delete all quotes and replace commans with line breaks. Then treat as .ini file
-"[www.mydomain.com]
-raida = 1,
-dn = 16,
-id = 983922,
-cp = 0,
-sa = 1"
+"[notes],
+To parse = Delete all quotes and replace commas with line breaks. Then treat as .ini file;
+
 "
-"[www2.subdomain.mydomain.com]
-raida = 1,
-dn = 65200,
-id = 983922,
-cp = 0,
-sa = 1"
 "
-"[*.mydomain.com]
+[www.mydomain.com];
+raida = 1;
+dn = 16;
+id = 983922;
+cp = 0;
+sa = 1;
+srv_port:9998
+srv_proto:TCP;
+srv_target: server.example.com;
+"
+"
+[www2.subdomain.mydomain.com],
+raida = 1;
+dn = 65200;
+id = 983922;
+cp = 0;
+sa = 1;
+srv_port:9998;
+srv_proto:TCP;
+srv_target: server.example.com;
+"
+"
+[*.mydomain.com],
 raida = 42,
 dn = 8,
 id = 53,
 cp = 0,
-sa = 1"
+sa = 1
+srv_port:9998;
+srv_proto:TCP;
+srv_target: server.example.com;
+"
+
+"
+[%.mydomain.com],
+raida = 42,
+dn = 8,
+id = 53,
+cp = 0,
+sa = 1
+srv_port:9998;
+srv_proto:UDP;
+srv_target: %.example.com;
 "
 ```
 In the example above, the key receivers is advertising that it has shared secrets (coins) with the RAIDA IDs of 1, 2, 17 and 65023.  The client will then need to ask the Guardians for host records for the locations of these RAIDA. And the client may need to get coins to talk to these RAIDA. 
