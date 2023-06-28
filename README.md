@@ -27,6 +27,6 @@ For a client to use RKE it must be able to resolve Server RAIDA Membership, Post
 - [ ] Resolve server signalling service using DNS wrapped in [PLS](https://something.com).
 - [ ] Resolve server membership records using DNS wrapped in [PLS](https://something.com).
 - [ ] Post keys using the [Post Key](https://github.com/worthingtonse/RAIDA_KEY_EXCHANGE/blob/main/RKE%20Services.md#post-key.md) protocol. 
-- [ ] Signal the server using the [Signal Service]([https://something.com](https://github.com/worthingtonse/RAIDA_KEY_EXCHANGE/blob/main/RKE%20Services.md#get-key.md) protocol
+- [ ] Signal the server using the [Signal Service](https://github.com/worthingtonse/RAIDA_KEY_EXCHANGE/blob/main/RKE%20Services.md#get-key.md) protocol
 
 
