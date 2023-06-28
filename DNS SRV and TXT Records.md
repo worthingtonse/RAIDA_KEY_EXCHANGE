@@ -12,18 +12,51 @@ There are three types of DNS records that can be used:
 3. Anonymous. This allows the client to specify the RAIDA and the server will then join these RAIDA
 
 
+## TXT record naming convention (raida.domain.tld)
+The names of these txt records always start with the name "raida"
+Sample names. 
+```
+raida.google.com
+raida.example.net
+raida.myorganization.org
+raida.subdomain.example.com
+```
+
 key | Value | Description
 ---|---|---
+host | Fully Qualified Domain Name | use * for all hosts on the domain.
 raida | 0 through 65,534 | The RAIDA the server can post keys
 dn | 0 through 255 | The coin denomination the server will use to get the keys
 id | 0 through 16,777,216 | The coin Serial Numaber the server will use to get the keys
-Client privacy | yes or no | Must the client leave their key ID?
-Server Authenticity | yes or no | Must the server leave their key ID?
+client_privacy | yes or no | Must the client leave their key ID?
+server_authentication | yes or no | Must the server leave their key ID?
+
 
 
 ### Sample Coin ID DNS TXT record named "RKE"'s content:
-```
-"raida:1,id:983922,privacy:full,authentication:mutual" "raida:2,id:8893" "raida:17,id:38827" "raida:65023, id:988223"
+```ini
+;To parse, delete all quotes and replace commans with line breaks. Then treat as .ini file
+"[www.mydomain.com]
+raida = 1,
+dn = 16,
+id = 983922,
+cp = 0,
+sa = 1"
+"
+"[www2.subdomain.mydomain.com]
+raida = 1,
+dn = 65200,
+id = 983922,
+cp = 0,
+sa = 1"
+"
+"[*.mydomain.com]
+raida = 42,
+dn = 8,
+id = 53,
+cp = 0,
+sa = 1"
+"
 ```
 In the example above, the key receivers is advertising that it has shared secrets (coins) with the RAIDA IDs of 1, 2, 17 and 65023.  The client will then need to ask the Guardians for host records for the locations of these RAIDA. And the client may need to get coins to talk to these RAIDA. 
 
