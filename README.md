@@ -19,14 +19,14 @@ Computers must store shared secrets called "Keys".
 To enable a server to use RKE, a DNS service record and a DNS TXT record explaining the server's RAIDA membership need to be created. Also, an RKE signalling service should be installed on the server. 
 - [ ] Add an [RKE signalling service record](https://something.com) to the servers DNS.
 - [ ] Add an [RKE Membership TXT record](https://something.com)  to the server's DNS. 
-- [ ] Receive Key Signals using the [Signal Service](https://something.com) protocol
-- [ ] Get keys using the [Get Key]([https://something.com](https://github.com/worthingtonse/RAIDA_KEY_EXCHANGE/blob/main/RKE%20Services.md#get-key.md) protocol. 
+- [ ] Receive Key Signals using the [Post Key](https://something.com) protocol
+
 		
 ## 3. Enabling a Client to use RKE
 For a client to use RKE it must be able to resolve Server RAIDA Membership, Post keys and signal the RKE Enabled Server.
-- [ ] Resolve server signalling service using DNS wrapped in [PLS](https://something.com).
+- [ ] Resolve server signaling service using DNS wrapped in [PLS](https://something.com).
 - [ ] Resolve server membership records using DNS wrapped in [PLS](https://something.com).
-- [ ] Post keys using the [Post Key](https://github.com/worthingtonse/RAIDA_KEY_EXCHANGE/blob/main/RKE%20Services.md#post-key.md) protocol. 
-- [ ] Signal the server using the [Signal Service](https://github.com/worthingtonse/RAIDA_KEY_EXCHANGE/blob/main/RKE%20Services.md#get-key.md) protocol
+- [ ] Encrypt Keys using the [Encrypt Key](https://github.com/worthingtonse/RAIDA_KEY_EXCHANGE/blob/main/RKE%20Services.md#post-key.md) protocol. 
+- [ ] Post Encryption Key the server using the [Signal Service](https://github.com/worthingtonse/RAIDA_KEY_EXCHANGE/blob/main/RKE%20Services.md#get-key.md) protocol
 
 
