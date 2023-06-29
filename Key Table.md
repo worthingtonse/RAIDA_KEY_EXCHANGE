@@ -4,8 +4,10 @@ This is the table that is stored on the RKE Server.
 
 This table is only used when the client and the server will connect without authenticating each other. This is used for encryption between unknowns. 
 
-Each Record is 70 bytes. 
- 
+Each Record is 33 bytes. 
+
+Keys can only be retrieved once. 
+
 Column | Datatype | Note | Required?
  ---|---|---|---
 Hash of Key ID | 16 Bytes | MD5 hash of GUID | Yes
