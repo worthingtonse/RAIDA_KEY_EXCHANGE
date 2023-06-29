@@ -116,6 +116,7 @@ IP | Version of IP. Either 4 or 6
 IP | IPv4 of key server or first 4 of IPv6
 00 | Last 12 of IPv6 of key server or random numbers if IPv6
 PT | Port used by the key server
+ME | Memo. This is encrypted by the keys. 
 
 
 Sample Request with 4 key parts(Unencrypted):
@@ -133,9 +134,21 @@ HS HS HS HS HS HS HS HS HS HS HS HS HS HS HS HS
 IP IP IP IP 00 00 00 00 00 00 00 00 00 00 00 00  PT PT PT
 IP
 HS HS HS HS HS HS HS HS HS HS HS HS HS HS HS HS 
-IP IP IP IP 00 00 00 00 00 00 00 00 00 00 00 00  PT PT PT 
+IP IP IP IP 00 00 00 00 00 00 00 00 00 00 00 00  PT PT PT
+ME ME ME ME ME ME ME ME ME ME ME ME ME ME ME ME
+ME ME ME ME ME ME ME ME ME ME ME ME ME ME ME ME
+ME ME ME ME ME ME ME ME ME ME ME ME ME ME ME ME
+ME ME ME ME ME ME ME ME ME ME ME ME ME ME ME ME
+
 E3 E3 //Not Encrypted
 ```
+
+Algorithm
+1. The recevier gets the key parts .
+2. The reciever puts the key parts together in the order of smallest number to biggest number.
+3. The receiver tells the 
+
+
 
 The response will have a fixed 18 bytes. This response will be
 Sample Response to Sender:
