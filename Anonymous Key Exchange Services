@@ -1,4 +1,4 @@
-# Private Key Exchange
+# Anonymous Key Exchange Services
 This allows the client and the server to exchange keys without any mutual authentication. 
 
  ## The RKE's Key Table located on the RKE server:
