@@ -7,7 +7,7 @@ Command Code | Service
 42 | [Get Key](RAIDA%20Key%20Services.md#get-key) 
 43 | [Signal](RAIDA%20Key%20Services.md#signal) 
 
-# POST KEY
+## POST KEY
 The computer that wants to initiate a private session between uses this service to post keys for the other computer to download. This service uses UDP. 
 
 1. The client will start by generating a key that is at least 128 bits (16 bytes).
@@ -58,17 +58,17 @@ Code | Status | Details | Implemented Now?
 7 | Fail: Coin used for encryption was used too many times. | No
 8 | Offline | Service temporarilty offline  | No
 
-Sample Response Body
+### Sample Response Body
 ```
 E3 E3 //Not Encrypted
 ```
 
 
 
-# GET KEY
+## GET KEY
 Allows a client to get a key on an RKE server that was left for them by a computer initiating a private conversation.  
 
-Sample Request fixed size: 
+### Sample Request fixed size: 
 ```hex
 CH CH CH CH CH CH CH CH CH CH CH CH CH CH CH CH 
 HS HS HS HS HS HS HS HS HS HS HS HS HS HS HS HS //Hash of Key ID 
@@ -94,7 +94,7 @@ Code | Status | Details
 
 
 
-Sample Respons fixed size: 
+### Sample Respons fixed size: 
 ```hex
 ID ID ID ID ID ID ID ID ID ID ID ID ID ID ID ID //Key ID Hash
 DN  SN SN SN SN //The encryption ID of the key sender 
@@ -103,7 +103,7 @@ E3 E3  //Not Encrypted
 ```
 
 
-# SIGNAL
+## SIGNAL
 
 Tells the Receiver that there are keys waiting for it. 
 
@@ -119,7 +119,7 @@ PT | Port used by the key server
 ME | Memo. This is encrypted by the keys. 
 
 
-Sample Request with 4 key parts(Unencrypted):
+### Sample Request with 4 key parts(Unencrypted):
 ```hex
 CH CH CH CH CH CH CH CH CH CH CH CH CH CH CH CH  
 NU
@@ -143,7 +143,7 @@ ME ME ME ME ME ME ME ME ME ME ME ME ME ME ME ME
 E3 E3 //Not Encrypted
 ```
 
-Algorithm
+### Algorithm
 1. The recevier gets the key parts .
 2. The reciever puts the key parts together in the order of smallest number to biggest number.
 3. The receiver tells the 
@@ -151,7 +151,7 @@ Algorithm
 
 
 The response will have a fixed 18 bytes. This response will be
-Sample Response to Sender:
+### Sample Response to Sender:
 ```hex
 FF FF 00 FF 00 00 00 00 00 FF 00 00 00 00 00 00 //Byte fields showing which key parts were used. 
 E3 E3  //Not Encrypted
