@@ -12,26 +12,28 @@ Command Code | Service | Done in Rust | Done in C | Done in C2
 Sample Request:
 ```hex
 CH CH CH CH CH CH CH CH CH CH CH CH CH CH CH CH  //Client's Challenge to RKE server
-DN SN SN SN SN //Target Server's ID from the TXT file "dn" and "id".
-KY KY KY KY KY KY KY KY KY KY KY KY KY KY KY KY  
+DN SN SN SN SN //Target Server's ID from the TXT file "dn" and "id". Used to encrypt the key.
+NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO //Nonce
+KY KY KY KY KY KY KY KY 
 E3 E3  //Not Encrypted
 ```
 Example: 
 ```
 EB6BD09D809743DFA8955BBF96274CC5
 64C02B25EE
-BE4CDFAE29887C11
-B25EE64C02
-9887C11BE4CDFAE2
+BE4CDFAE29887C119887C11BE4CDFAE2
 E3E3
 ```
 
-The RKE will take 8 byte key parts and then add 5 bytes of the coin to be fixed (DN SN SN SN SN), 2 random bytes to the end. 
-Then it adds one know byte to the end: 0xFF. 
-This creates a 16 byte block that can be encrypted effectivly and padds it as needed. 
-Then, the RKE server will use the encryption key that the client specified to encrypt the 16 bytes. 
-The RKE returns the encrypted 16 bytes to the user.
+Algorithm:
 
+1. Take the 8 byte key part and add 5 bytes of the coin to be fixed (DN SN SN SN SN)
+2. Add 2 random bytes to the end. 
+3. Add one know byte to the end: 0xFF. 
+4. Now you have a 16 byte block that can be encrypted effectivly. 
+5. Use the encryption key specified (AN of the Target Server's ID) to encrypt the 16 bytes. 
+6. Return the encrypted 16 bytes to the user. (Encrypted with the caller's key)
+Note: 
 The nonce for encryption is the same as the nonce sent in the request header.
 
 Response Status Codes
@@ -56,30 +58,37 @@ The "Give Key" service recieves a group of tickets encrypted by other RAIDAs. It
 
 * Seems the Nonce in the header should be the same as the ones used in the "Encrypt Key" requests.
 
-Sample Request. Note: This is all enencrypted:
-```hex
-CH CH CH CH CH CH CH CH CH CH CH CH CH CH CH CH  //Challenge
-DN SN SN SN SN //The serial number of the fracked coin. 
-CO CO SP DA SH DN SN SN SN SN KY KY KY KY KY KY KY KY KY KY KY KY KY KY KY KY //Coin to encrypt and key part. 
-CO CO SP DA SH DN SN SN SN SN KY KY KY KY KY KY KY KY KY KY KY KY KY KY KY KY //Coin to encrypt and key part.  
-.....
-CO CO SP DA SH DN SN SN SN SN KY KY KY KY KY KY KY KY KY KY KY KY KY KY KY KY //Coin to encrypt and key part. 
-E3 E3  //Not Encrypted
-```
-
 Meaning of Codes:
 Code | Meaning
 ---|---
 CH | Challenge
-CO | Coin ID
+CO | Coin ID (Cloudcoin = 6)
 SP | Split ID (Zero if no splits)
-DA | Detection Agent (RAIDA ID)
-SH | Shard ID
+ST | Stripe (0-24) 
+SH | Shard ID (0-31)
 DN | Denomination 
 SN | Serial Number
 KY | Key
+NO | Nounce used to encrypt the key.
 E3 | Ending bytes
 
+Sample Request. Note: This is all enencrypted:
+```hex
+CH CH CH CH CH CH CH CH CH CH CH CH CH CH CH CH  //Challenge
+
+CO CO SP ST SH DN SN SN SN SN
+NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO
+KY KY KY KY KY KY KY KY KY KY KY KY KY KY KY KY //Coin to encrypt and key part.
+
+CO CO SP DA SH DN SN SN SN SN
+NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO 
+KY KY KY KY KY KY KY KY KY KY KY KY KY KY KY KY //Coin to encrypt and key part.  
+.....
+CO CO SP DA SH DN SN SN SN SN
+NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO
+KY KY KY KY KY KY KY KY KY KY KY KY KY KY KY KY //Coin to encrypt and key part. 
+E3 E3  //Not Encrypted
+```
 
 The service will then decypt the keys using the keys that it owns. 
 It looks for the 0xFF at the end to make sure the coin is whole and true. 
