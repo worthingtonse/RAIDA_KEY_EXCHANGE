@@ -1,28 +1,23 @@
-# RAIDA Key Exchange Services
+# Server Authenticated Key Exchange
 
-This is used to exchange keys between clients who have shared secrets with RAIDA servers but not a specific RAIDA server. 
-This will establish a shared secret with a fracked RAIDA so fixes can be done. 
+This is used to exchange keys between clients who have shared secrets with RAIDA servers but not a specific server. The client will lookup the servers's TXT record to locate servers to change keys with. 
 
 Command Code | Service | Done in Rust | Done in C | Done in C2
 --- | --- | :---: | --- | ---
-44 | [Encrypt RAIDA Key](RAIDA%20Key%20Tickets.md#post-raida-key) |  | 🟢|
-45 | [Post RAIDA Key](RAIDA%20Key%20Services.md#post-raida-key) |  |🟢 |
+44 | [Encrypt Key](RAIDA%20Key%20Tickets.md#encrypt-key) |  | 🟢 |
+45 | [Give Keys](RAIDA%20Key%20Services.md#give-keys)    |  | 🟢 |
 
+## ENCRYPT KEY
 
-
-## ENCRYPT RAIDA KEY
-
-Note: In Phase I, Clients know that the RAIDA will each have 1000 coins on their 0 network and the client can pick one at random to encrypt the target RAIDA's 
 Sample Request:
 ```hex
-CH CH CH CH CH CH CH CH CH CH CH CH CH CH CH CH  //Challenge
-DN SN SN SN SN //The ID of who the key is for. // The Denomination, The Serial Number of the Bob's encryption coin (1-25,999) depending on Bob's RAIDA ID. 
-KY KY KY KY KY KY KY KY //Eight byte key part. 
-DN SN SN SN SN //The serial number of the coin that will be used to create a shared secret between Alice and Bob (Fracked coin on Bob)
-AN AN AN AN AN AN AN AN AN AN AN AN AN AN AN AN //The AN of the coin used to create a shared secret between Alica and Bob (Fracked coin on Bob)
+CH CH CH CH CH CH CH CH CH CH CH CH CH CH CH CH  //Client's Challenge to RKE server
+DN SN SN SN SN //Target Server's ID from the TXT file "dn" and "id".
+KY KY KY KY KY KY KY KY KY KY KY KY KY KY KY KY  
 E3 E3  //Not Encrypted
-
+```
 Example: 
+```
 EB6BD09D809743DFA8955BBF96274CC5
 64C02B25EE
 BE4CDFAE29887C11
@@ -52,12 +47,8 @@ D798010F14C64102AC3EB6D728166054
 E3 E3 //Not Encrypted
 ```
 
-## POST RAIDA KEY
-Phase I: This service only runs on the RAIDA. It allows clients to tell the RAIDA to decrypt key parts so the communications can be encrypted. 
-
-How it works in Phase I: 
-
-The "Post Key" service recieves a group of tickets encrypted by other RAIDAs. It uses its Authenticity Numbers of its own keys to decrypt them. Then it assembles the keys that it is able to encrypt a response to the caller. It checks that each key ends with a "0xFF"and removes the last eight bytes that the client does not know about. It Ignores keys it is unable to encrypt and then respond to the caller with:
+## GIVE KEYS
+The "Give Key" service recieves a group of tickets encrypted by other RAIDAs. It uses its Authenticity Numbers of its own keys to decrypt them. Then it assembles the keys that it is able to encrypt a response to the caller. It checks that each key ends with a "0xFF"and removes the last eight bytes that the client does not know about. It Ignores keys it is unable to encrypt and then respond to the caller with:
 
 * Which key parts it used to create a master key.
 
