@@ -2,7 +2,7 @@
 
 Servers need to publish DNS records so that clients can find their RAIDA Key servers used by the server and post the keys to the server. 
 
-If there are no DNS records or DNS names are unknown, then it is assumed that they both have keys(CloudCoins) on the CloudCoin RAIDA and that the place to post the request is on the same host as the one being contacted on port 75. 
+If there are no DNS records or DNS names are unknown, then it is assumed that they both have keys(CloudCoins) on the CloudCoin RAIDA (6) and that the place to post the request is on the same host as the one being contacted on port 75. 
 
 ## TXT record naming convention
 The names of these TXT records always start with the name "raida"
@@ -15,7 +15,6 @@ raida.subdomain.example.com
 ```
 ## Text inside TXT record
 
-
 key | Value | Description
 ---|---|---
 host | Fully Qualified Domain Name | use * for all hosts on the domain. % for specified hosts. 
@@ -26,8 +25,6 @@ cp (client_privacy) | 0 -? | Must the client authenticate? 0 for no.
 sa (server_authentication) | 0 -? | Will the server authenticate? 0 for no. 
 srv_port | 0-65534 | The location of the server's listener. The default is 75 but this can be any port
 srv_target | FQDN | The host name of the server with the listener. 
-
-
 
 
 ### Sample Coin ID DNS TXT record named "RKE"'s content:
@@ -78,7 +75,19 @@ srv_port:75;
 srv_target: %.example.com;
 "
 ```
+## No Record?
+The only records that need to be placed here are teh "rule breakers" and if the server wants to provide mutula authentication. Otherise, the private key exchange can be used. 
 
+That is any records that do not match the following: 
+```
+RAIDA = 6
+ID = none
+ND =  none
+cp = 0 (none)
+sa = (none)
+server port = 75
+server target = The same IP address. 
+```
 
 
 <!--
@@ -104,8 +113,8 @@ Sample Anonymous DNS TXT record named "RKE"'s content:
 2. The client then parse the TXT file.
 3. The client will decide on a strategy of which RKE servers to use.
 4. The client resolves the IP addresses of the RKE servers (if needed). 
--->
 
 ## Ticket Getting. 
 In the ticket getting phase, the client will create a key and then have the receiver's RKE servers encrypt it. 
+-->
 
