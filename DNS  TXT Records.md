@@ -18,7 +18,9 @@ raida.subdomain.example.com
 key | Value | Description
 ---|---|---
 host | Fully Qualified Domain Name | use * for all hosts on the domain. % for specified hosts. 
-raida | 0 through 65,534 | The RAIDA the server can post keys. 65,534 is for a local RAIDA.
+co | 0 through 65,534 | The RAIDA the server can post keys (Coin ID). 65,534 is for a local RAIDA.
+sp | 0 | split ID for future use. 
+st | 0-31 | Stripe ID if the coin uses stripes. 
 dn | 0 through 255 | The coin denomination the server will use to get the keys
 id | 0 through 16,777,216 | The coin Serial Numaber the server will use to get the keys
 cp (client_privacy) | 0 -? | Must the client authenticate? 0 for no. 
@@ -35,7 +37,9 @@ To parse = Delete all quotes and replace commas with line breaks. Then treat as 
 "
 "
 [www.mydomain.com];
-raida = 1;
+co = 1;
+sp = 0;
+st = 0;
 dn = 16;
 id = 983922;
 cp = 0;
@@ -45,7 +49,9 @@ srv_target: server.example.com;
 "
 "
 [www2.subdomain.mydomain.com],
-raida = 1;
+co = 1;
+sp = 0;
+st = 0;
 dn = 65200;
 id = 983922;
 cp = 0;
@@ -55,7 +61,9 @@ srv_target: server.example.com;
 "
 "
 [*.mydomain.com],
-raida = 42,
+co = 8;
+sp = 0;
+st = 0;
 dn = 8,
 id = 53,
 cp = 0,
@@ -66,7 +74,9 @@ srv_target: server.example.com;
 
 "
 [%.mydomain.com],
-raida = 42,
+co = 42;
+sp = 0;
+st = 0;
 dn = 8,
 id = 53,
 cp = 0,
