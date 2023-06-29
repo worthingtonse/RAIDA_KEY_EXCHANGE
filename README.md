@@ -20,7 +20,7 @@ Computers must store shared secrets called "Keys".
 ## 2. Enabling a Server to use RKE
 To enable a server to use RKE, a DNS service record and a DNS TXT record explaining the server's RAIDA membership need to be created. Also, an RKE signalling service should be installed on the server. 
 - [ ] Add an [RKE Membership TXT record](https://github.com/worthingtonse/RAIDA_KEY_EXCHANGE/blob/main/DNS%20SRV%20and%20TXT%20Records.md)  to the server's DNS. 
-- [ ] Receive Key Signals using the [Post Key](https://github.com/worthingtonse/RAIDA_KEY_EXCHANGE/blob/main/Key%20Exchange%20Services.md#post-raida-key) protocol
+- [ ] Receive Key Signals using the [Post RAIDA Key](https://github.com/worthingtonse/RAIDA_KEY_EXCHANGE/blob/main/Key%20Exchange%20Services.md#post-raida-key) protocol
 
 		
 ## 3. Enabling a Client to use RKE
