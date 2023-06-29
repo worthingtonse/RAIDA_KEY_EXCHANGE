@@ -1,6 +1,19 @@
-# RAIDA Key Exchange
+# Private Key Exchange
+This allows the client and the server to exchange keys without any mutual authentication. 
 
-![RAIDA Key Exchange](Server/rke.jpg)
+ ## The RKE's Key Table located on the RKE server:
+ 
+ Each Record is 70 bytes. 
+ 
+ Column | Datatype | Note | Required?
+ ---|---|---|---
+ Sender's Encryption Coin | 5 bytes (DN SN SN SN) |Primay Key. This is coin used by the client to encrypt their key part to the RKE server.| Yes
+ Receiver's Encryption Coin | 5 bytes (DN SN SN SN) |Primay Key. This is coin used by the client to encrypt their key part to the RKE server.| No
+ Sender's IP Address | 16 bytes | IPv6 uses all 16 bytes. IPv4 uses just the last 4 with all other values being zero. Can be zeros | No
+ Receiver's IP Address | 16 bytes | The computer that is allowed to get the key parts. Can be zeros | N0
+ Key ID MD5 Hash | 16 Bytes | GUID | Yes
+ Key Length | 1 byte | should be 1 through 16. |Yes 
+ Key Part | 16 Bytes | Fixed but only the last bytes that match the key lenght are used. | Yes
 
 These services are meant to allow keys to be shared amoung computers that are not RAIDA. They will use the RKE to do the share.
 
@@ -20,19 +33,6 @@ The last byte of this key will be 0xFF.
 They client will then devide the key into difference sizes that will be 4 bytes, 8 bytes, 16 bytes, 24 bytes 32 bytes or 40 bytes. 
 The key parts are then posted to different RKE servers using this protocol: 
  
- ## The RKE's Key Table located on the RKE server:
- 
- Each Record is 70 bytes. 
- 
- Column | Datatype | Note | Required?
- ---|---|---|---
- Sender's Encryption Coin | 5 bytes (DN SN SN SN) |Primay Key. This is coin used by the client to encrypt their key part to the RKE server.| Yes
- Receiver's Encryption Coin | 5 bytes (DN SN SN SN) |Primay Key. This is coin used by the client to encrypt their key part to the RKE server.| No
- Sender's IP Address | 16 bytes | IPv6 uses all 16 bytes. IPv4 uses just the last 4 with all other values being zero. Can be zeros | No
- Receiver's IP Address | 16 bytes | The computer that is allowed to get the key parts. Can be zeros | N0
- Key ID MD5 Hash | 16 Bytes | GUID | Yes
- Key Length | 1 byte | should be 1 through 16. |Yes 
- Key Part | 16 Bytes | Fixed but only the last bytes that match the key lenght are used. | Yes
  
  
 Sample Request to RKE server to Post a key part. This is fixed length: 
