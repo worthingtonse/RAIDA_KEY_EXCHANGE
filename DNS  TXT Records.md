@@ -76,7 +76,7 @@ srv_target: %.example.com;
 "
 ```
 ## No Record?
-The only records that need to be placed here are teh "rule breakers" and if the server wants to provide mutula authentication. Otherise, the private key exchange can be used. 
+The only records that need to be placed in the TXT are the "rule breakers" and if the server wants to provide mutual authentication. Otherise, the private key exchange services can be used. 
 
 That is any records that do not match the following: 
 ```
