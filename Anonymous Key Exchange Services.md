@@ -1,22 +1,6 @@
 # Anonymous Key Exchange Services
 This allows the client and the server to exchange keys without any mutual authentication. 
 
- ## The RKE's Key Table located on the RKE server:
- 
- Each Record is 70 bytes. 
- 
- Column | Datatype | Note | Required?
- ---|---|---|---
- Sender's Encryption Coin | 5 bytes (DN SN SN SN) |Primay Key. This is coin used by the client to encrypt their key part to the RKE server.| Yes
- Receiver's Encryption Coin | 5 bytes (DN SN SN SN) |Primay Key. This is coin used by the client to encrypt their key part to the RKE server.| No
- Sender's IP Address | 16 bytes | IPv6 uses all 16 bytes. IPv4 uses just the last 4 with all other values being zero. Can be zeros | No
- Receiver's IP Address | 16 bytes | The computer that is allowed to get the key parts. Can be zeros | N0
- Key ID MD5 Hash | 16 Bytes | GUID | Yes
- Key Length | 1 byte | should be 1 through 16. |Yes 
- Key Part | 16 Bytes | Fixed but only the last bytes that match the key lenght are used. | Yes
-
-These services are meant to allow keys to be shared amoung computers that are not RAIDA. They will use the RKE to do the share.
-
 Command Code | Service 
 --- | --- 
 41 | [Post Key](DA%20Key%20Tickets.md#post-key) 
@@ -26,34 +10,38 @@ Command Code | Service
 
 # POST KEY
 The computer that wants to initiate a private session between uses this service to post keys for the other computer to download. This service uses UDP. 
-It does not authenticate the clients and servers. However, it does some allow the option to require 
 
 The client will start by generating a key that is at least 128 bits (16 bytes).
 The last byte of this key will be 0xFF. 
 They client will then devide the key into difference sizes that will be 4 bytes, 8 bytes, 16 bytes, 24 bytes 32 bytes or 40 bytes. 
 The key parts are then posted to different RKE servers using this protocol: 
+
+ Code | Meaning
+ ---|---
+ CH | Challenge
+ ID | Key ID
+ KS | Key Start byte index within the padding field 0-127
+ KL | Length of key.  Must be 4, 8, 16, 24, 32 or 40. Other numbers are invalid
+ 00 | Padding. Random numbers to help keep the key encrypted secretly. 
  
- 
- 
-Sample Request to RKE server to Post a key part. This is fixed length: 
+Sample Reques: Shows an 8 byte key hidden in the padding starting at the 19th byte.  164 Btyes fixed. 
 ```hex
 CH CH CH CH CH CH CH CH CH CH CH CH CH CH CH CH  //Challenge
 ID ID ID ID ID ID ID ID ID ID ID ID ID ID ID ID //Key ID
-IP IP IP IP IP IP IP IP IP IP IP IP I4 I4 I4 I4 //IP address of the computer to receive (Optional. Zeros if empty)
-DN SN SN SN SN //Encryption Coin that Receiver should use (Optional. Zeros if empty)
-KY KY KY KY KY KY KY KY KY KY KY KY KY KY KY KY //Key space. There are a fixed 128 bytes of key space in every post
-KY KY KY KY KY KY KY KY KY KY KY KY KY KY KY KY //Key space. The key space is a bunch of random numbers.
-KY KY KY KY KY KY KY KY KY KY KY KY KY KY KY KY //Key 
-KY KY KY KY KY KY KY KY KY KY KY KY KY KY KY KY //Key 
-KY KY KY KY KY KY KY KY KY KY KY KY KY KY KY KY //Key 
-KY KY KY KY KY KY KY KY KY KY KY KY KY KY KY KY //Key 
-KY KY KY KY KY KY KY KY KY KY KY KY KY KY KY KY //Key 
-KY KY KY KY KY KY KY KY KY KY KY KY KY KY KY KY //Key 
-KS //Key part start: A number between 0 and 127 that shows the index number in the key space where the first byte of the key is located.
-KL //Key part Length: How many bytes long the key is. Must be 4, 8, 16, 24, 32 or 40. Other numbers are invalid
+KS 
+KL
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00 00 00 KY KY KY KY KY KY KY KY 00 00 00 00 00
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 E3 E3  //Not Encrypted 
 ```
 NOTE: The Key Start and the Key Length help to strengthen the encryption. It also reduces DOS attacks designed to use up system resource.
+
 The key used to encrypt the request will write over any other requests it has made. Each encryption coin can only make one request at a time and is the Primary key in the RKE server's key table. 
 
 
@@ -118,7 +106,7 @@ E3 E3  //Not Encrypted
 
 
 
-# Signal
+# SIGNAL
 Tells the Receiver that there are keys waiting for it. 
 
 Sample Request (Unencrypted):
