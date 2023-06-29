@@ -7,13 +7,13 @@ Command Code | Service
 42 | [Get Key](RAIDA%20Key%20Services.md#get-key) 
 43 | [Signal](RAIDA%20Key%20Services.md#signal) 
 
-
 # POST KEY
 The computer that wants to initiate a private session between uses this service to post keys for the other computer to download. This service uses UDP. 
 
-The client will start by generating a key that is at least 128 bits (16 bytes).
-The last byte of this key will be 0xFF. 
-They client will then devide the key into difference sizes that will be 4 bytes, 8 bytes, 16 bytes, 24 bytes 32 bytes or 40 bytes. 
+1. The client will start by generating a key that is at least 128 bits (16 bytes).
+2. The last byte of this key will be 0xFF. 
+3. They client will then devide the key into difference sizes that will be 4 bytes, 8 bytes, 16 bytes, 24 bytes 32 bytes or 40 bytes. 
+
 The key parts are then posted to different RKE servers using this protocol: 
 
  Code | Meaning
@@ -23,6 +23,7 @@ The key parts are then posted to different RKE servers using this protocol:
  KS | Key Start byte index within the padding field 0-127
  KL | Length of key.  Must be 4, 8, 16, 24, 32 or 40. Other numbers are invalid
  00 | Padding. Random numbers to help keep the key encrypted secretly. 
+ HS | Hash of Key ID 
  
 Sample Reques: Shows an 8 byte key hidden in the padding starting at the 19th byte.  164 Btyes fixed. 
 ```hex
@@ -70,9 +71,7 @@ Allows a client to get a key on an RKE server that was left for them by a comput
 Sample Request fixed size: 
 ```hex
 CH CH CH CH CH CH CH CH CH CH CH CH CH CH CH CH 
-ID ID ID ID ID ID ID ID ID ID ID ID ID ID ID ID //Key ID Hash
-DN  SN SN SN SN //The encryption ID of the key sender (Optional all zeros)
-IP IP IP IP IP IP IP IP IP IP IP IP I4 I4 I4 I4 //IP address of the sender (Optional all zeros)
+HS HS HS HS HS HS HS HS HS HS HS HS HS HS HS HS //Hash of Key ID 
 E3 E3  //Not Encrypted
 ```
 
@@ -103,28 +102,40 @@ IP IP IP IP IP IP IP IP IP IP IP IP I4 I4 I4 I4
 E3 E3  //Not Encrypted
 ```
 
-
+Code | Meaning
+---|---
+CH | Challenge to server
+NU | Number of key parts that need to be retrieved
+HS | Hash of the key ID
+IP | Version of IP. Either 4 or 6
+IP | IPv4 of key server or first 4 of IPv6
+00 | Last 12 of IPv6 of key server or random numbers if IPv6
+PT | Port used by the key server
 
 
 # SIGNAL
 Tells the Receiver that there are keys waiting for it. 
 
-Sample Request (Unencrypted):
+Sample Request with 4 key parts(Unencrypted):
 ```hex
 CH CH CH CH CH CH CH CH CH CH CH CH CH CH CH CH  
-NU //THe number of key parts that have created. 
-
-ID ID ID ID ID ID ID ID ID ID ID ID ID ID ID ID // Hash of the Key ID put on the first RKE server
-IP IP IP IP IP IP IP IP IP IP IP IP IP IP IP IP PT PT PT //IP and port number of the first RKE server
-DN SN SN SN SN //Senders Encryption Coin (Optional)
-DN SN SN SN SN //Coin Receiver should use to do the encryption. (Optional)
-
---- The above four lines are repeated for every key part that the receiver is being told about. 
---- Maximum of 16 key parts. 
-
+NU
+IP
+HS HS HS HS HS HS HS HS HS HS HS HS HS HS HS HS 
+IP IP IP IP 00 00 00 00 00 00 00 00 00 00 00 00  PT PT PT 
+IP
+HS HS HS HS HS HS HS HS HS HS HS HS HS HS HS HS 
+IP IP IP IP 00 00 00 00 00 00 00 00 00 00 00 00  PT PT PT
+IP
+HS HS HS HS HS HS HS HS HS HS HS HS HS HS HS HS 
+IP IP IP IP 00 00 00 00 00 00 00 00 00 00 00 00  PT PT PT
+IP
+HS HS HS HS HS HS HS HS HS HS HS HS HS HS HS HS 
+IP IP IP IP 00 00 00 00 00 00 00 00 00 00 00 00  PT PT PT 
 E3 E3 //Not Encrypted
 ```
 
+The response will have a fixed 18 bytes. This response will be
 Sample Response to Sender:
 ```hex
 FF FF 00 FF 00 00 00 00 00 FF 00 00 00 00 00 00 //Byte fields showing which key parts were used. 
