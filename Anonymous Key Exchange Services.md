@@ -102,6 +102,11 @@ IP IP IP IP IP IP IP IP IP IP IP IP I4 I4 I4 I4
 E3 E3  //Not Encrypted
 ```
 
+
+# SIGNAL
+
+Tells the Receiver that there are keys waiting for it. 
+
 Code | Meaning
 ---|---
 CH | Challenge to server
@@ -112,9 +117,6 @@ IP | IPv4 of key server or first 4 of IPv6
 00 | Last 12 of IPv6 of key server or random numbers if IPv6
 PT | Port used by the key server
 
-
-# SIGNAL
-Tells the Receiver that there are keys waiting for it. 
 
 Sample Request with 4 key parts(Unencrypted):
 ```hex
