@@ -1,19 +1,11 @@
-# Domain Name System Service and TXT Record Standard 
+# Domain Name Service Text Record 
 
-Servers need to publish DNS recoreds so that clients can find their RAIDA Key servers and the signal point to tell the server that keys have been sent. 
+Servers need to publish DNS records so that clients can find their RAIDA Key servers used by the server and post the keys to the server. 
 
-Before a person can receive keys from another user, they must have a DNS record that points to the RKE servers that the receiver has trust/coins with.
-However, if there are not DNS records or DNS names are unknown, then it is assumed that they both have keys(CloudCoins) on the CloudCoin RAIDA. 
+If there are no DNS records or DNS names are unknown, then it is assumed that they both have keys(CloudCoins) on the CloudCoin RAIDA and that the place to post the request is on the same host as the one being contacted on port 75. 
 
-Sample DNS TXT Record:
-There are three types of DNS records that can be used:
-1. Entire RAIDAs. These are the Coin IDs that are part of the RAIDA Namespace (0-65535). They specify entire RAIDA clouds that have RKE enabled. For exmple, the Coin ID 1 would mean that all 25 CloudCoin RAIDA can be used.
-2. Individual RKE servers. An array of specific RKE servers. These RKE may not be parts of other RAIDA or parts of coins. 
-3. Anonymous. This allows the client to specify the RAIDA and the server will then join these RAIDA
-
-
-## TXT record naming convention (raida.domain.tld)
-The names of these txt records always start with the name "raida"
+## TXT record naming convention
+The names of these TXT records always start with the name "raida"
 Sample names. 
 ```
 raida.google.com
@@ -21,15 +13,20 @@ raida.example.net
 raida.myorganization.org
 raida.subdomain.example.com
 ```
+## Text inside TXT record
+
 
 key | Value | Description
 ---|---|---
-host | Fully Qualified Domain Name | use * for all hosts on the domain.
-raida | 0 through 65,534 | The RAIDA the server can post keys
+host | Fully Qualified Domain Name | use * for all hosts on the domain. % for specified hosts. 
+raida | 0 through 65,534 | The RAIDA the server can post keys. 65,534 is for a local RAIDA.
 dn | 0 through 255 | The coin denomination the server will use to get the keys
 id | 0 through 16,777,216 | The coin Serial Numaber the server will use to get the keys
-client_privacy | yes or no | Must the client leave their key ID?
-server_authentication | yes or no | Must the server leave their key ID?
+cp (client_privacy) | 0 -? | Must the client authenticate? 0 for no. 
+sa (server_authentication) | 0 -? | Will the server authenticate? 0 for no. 
+srv_port | 0-65534 | The location of the server's listener. The default is 75 but this can be any port
+srv_target | FQDN | The host name of the server with the listener. 
+
 
 
 
@@ -46,8 +43,7 @@ dn = 16;
 id = 983922;
 cp = 0;
 sa = 1;
-srv_port:9998
-srv_proto:TCP;
+srv_port:75;
 srv_target: server.example.com;
 "
 "
@@ -57,8 +53,7 @@ dn = 65200;
 id = 983922;
 cp = 0;
 sa = 1;
-srv_port:9998;
-srv_proto:TCP;
+srv_port:75;
 srv_target: server.example.com;
 "
 "
@@ -68,8 +63,7 @@ dn = 8,
 id = 53,
 cp = 0,
 sa = 1
-srv_port:9998;
-srv_proto:TCP;
+srv_port:75;
 srv_target: server.example.com;
 "
 
@@ -80,11 +74,14 @@ dn = 8,
 id = 53,
 cp = 0,
 sa = 1
-srv_port:9998;
-srv_proto:UDP;
+srv_port:75;
 srv_target: %.example.com;
 "
 ```
+
+
+
+<!--
 In the example above, the key receivers is advertising that it has shared secrets (coins) with the RAIDA IDs of 1, 2, 17 and 65023.  The client will then need to ask the Guardians for host records for the locations of these RAIDA. And the client may need to get coins to talk to these RAIDA. 
 
 ### Sample Indvidual DNS TXT record named "RKE"'s content:
@@ -107,6 +104,7 @@ Sample Anonymous DNS TXT record named "RKE"'s content:
 2. The client then parse the TXT file.
 3. The client will decide on a strategy of which RKE servers to use.
 4. The client resolves the IP addresses of the RKE servers (if needed). 
+-->
 
 ## Ticket Getting. 
 In the ticket getting phase, the client will create a key and then have the receiver's RKE servers encrypt it. 
