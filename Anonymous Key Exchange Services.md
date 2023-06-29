@@ -25,7 +25,7 @@ The key parts are then posted to different RKE servers using this protocol:
  00 | Padding. Random numbers to help keep the key encrypted secretly. 
  HS | Hash of Key ID 
  
-Sample Reques: Shows an 8 byte key hidden in the padding starting at the 19th byte.  164 Btyes fixed. 
+Sample request showing an 8 byte key hidden in the padding starting at the 19th byte.  164 Btyes fixed. 
 ```hex
 CH CH CH CH CH CH CH CH CH CH CH CH CH CH CH CH  //Challenge
 ID ID ID ID ID ID ID ID ID ID ID ID ID ID ID ID //Key ID
